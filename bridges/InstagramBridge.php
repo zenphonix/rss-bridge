@@ -204,11 +204,11 @@ class InstagramBridge extends BridgeAbstract
                     $item['content'] = '<a href="' . htmlentities($item['uri']) . '" target="_blank">';
                     $imageOriginal = imagecreatefromstring(file_get_contents($mediaURI));
                     $imageSmall = imagescale($imageOriginal,540);
-                    $stream = fopen('php://memory','r+');
+                    $stream = fopen('php://temp','r+');
                     imagepng($imageSmall,$stream);
                     rewind($stream);
                     $image = stream_get_contents($stream);
-                    $imageData = 'data:image/jpeg;base64,' . base64_encode($image);
+                    $imageData = 'data:image/png;base64,' . base64_encode($image);
                     $item['content'] .= '<img src="' . $imageData . '" alt="' . $item['title'] . '" />';
                     $item['content'] .= '</a><br><br>' . nl2br(preg_replace($pattern, $replace, htmlentities($textContent)));
                     $item['enclosures'] = [$mediaURI];
@@ -252,11 +252,11 @@ class InstagramBridge extends BridgeAbstract
                 $content .= '<a href="' . $singleMedia->display_url . '" target="_blank">';
                 $imageOriginal = imagecreatefromstring(file_get_contents($singleMedia->display_url));
                 $imageSmall = imagescale($imageOriginal,540);
-                $stream = fopen('php://memory','r+');
+                $stream = fopen('php://temp','r+');
                 imagepng($imageSmall,$stream);
                 rewind($stream);
                 $image = stream_get_contents($stream);
-                $imageData = 'data:image/jpeg;base64,' . base64_encode($image);
+                $imageData = 'data:image/png;base64,' . base64_encode($image);
                 $content .= '<img src="' . $imageData . '" alt="' . $postTitle . '" />';
                 $content .= '</a><br>';
                 array_push($enclosures, $singleMedia->display_url);

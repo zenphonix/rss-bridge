@@ -208,7 +208,7 @@ class InstagramBridge extends BridgeAbstract
                     rewind($stream);
                     $image = stream_get_contents($stream);
                     $imageData = 'data:image/png;base64,' . base64_encode($image);
-                    $item['content'] = '<a href="' . htmlentities($item['uri']) . '" target="_blank">';
+                    $item['content'] = '<a href="' . htmlentities($mediaURI) . '" target="_blank">';
                     $item['content'] .= '<img src="' . $imageData . '" alt="' . $item['title'] . '" />';
                     $item['content'] .= '</a><br><br>' . nl2br(preg_replace($pattern, $replace, htmlentities($textContent)));
                     $item['enclosures'] = [$mediaURI];

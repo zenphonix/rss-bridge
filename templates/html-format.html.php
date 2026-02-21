@@ -75,7 +75,7 @@
 
                 <?php if ($item['enclosures']): ?>
                     <div class="attachments">
-						<br>
+						<hr>
                         <p>Attachments:</p>
                         <?php foreach ($item['enclosures'] as $enclosure): ?>
                             <li class="enclosure">

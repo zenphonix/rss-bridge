@@ -202,9 +202,14 @@ class InstagramBridge extends BridgeAbstract
                     break;
                 case 'GraphImage':
                     $item['content'] = '<a href="' . htmlentities($item['uri']) . '" target="_blank">';
-                    $image = imagecreatefromstring(file_get_contents($mediaURI));
-                    $imageSmall = imagescale($image,540);
-                    $imageData = 'data:image/jpeg;base64,' . base64_encode($imageSmall);
+                    $imageOriginal = imagecreatefromstring(file_get_contents($mediaURI));
+                    $imageSmall = imagescale($imageOriginal,540);
+                    $stream = fopen('php://memory','r+');
+                    imagepng($imageSmall,$stream);
+                    rewind($stream);
+                    $image = stream_get_contents($stream);
+                    $imageComp = gzdeflate($image);
+                    $imageData = 'data:image/jpeg;base64,' . base64_encode($imageComp);
                     $item['content'] .= '<img src="' . $imageData . '" alt="' . $item['title'] . '" />';
                     $item['content'] .= '</a><br><br>' . nl2br(preg_replace($pattern, $replace, htmlentities($textContent)));
                     $item['enclosures'] = [$mediaURI];
@@ -246,9 +251,14 @@ class InstagramBridge extends BridgeAbstract
                     continue; // check if not added yet
                 }
                 $content .= '<a href="' . $singleMedia->display_url . '" target="_blank">';
-                $image = imagecreatefromstring(file_get_contents($singleMedia->display_url));
-                $imageSmall = imagescale($image,540);
-                $imageData = 'data:image/jpeg;base64,' . base64_encode($imageSmall);
+                $imageOriginal = imagecreatefromstring(file_get_contents($singleMedia->display_url));
+                $imageSmall = imagescale($imageOriginal,540);
+                $stream = fopen('php://memory','r+');
+                imagepng($imageSmall,$stream);
+                rewind($stream);
+                $image = stream_get_contents($stream);
+                $imageComp = gzdeflate($image);
+                $imageData = 'data:image/jpeg;base64,' . base64_encode($imageComp);
                 $content .= '<img src="' . $imageData . '" alt="' . $postTitle . '" />';
                 $content .= '</a><br>';
                 array_push($enclosures, $singleMedia->display_url);

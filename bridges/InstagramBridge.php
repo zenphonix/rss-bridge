@@ -208,8 +208,7 @@ class InstagramBridge extends BridgeAbstract
                     imagepng($imageSmall,$stream);
                     rewind($stream);
                     $image = stream_get_contents($stream);
-                    $imageComp = gzdeflate($image);
-                    $imageData = 'data:image/jpeg;base64,' . base64_encode($imageComp);
+                    $imageData = 'data:image/jpeg;base64,' . base64_encode($image);
                     $item['content'] .= '<img src="' . $imageData . '" alt="' . $item['title'] . '" />';
                     $item['content'] .= '</a><br><br>' . nl2br(preg_replace($pattern, $replace, htmlentities($textContent)));
                     $item['enclosures'] = [$mediaURI];
@@ -257,8 +256,7 @@ class InstagramBridge extends BridgeAbstract
                 imagepng($imageSmall,$stream);
                 rewind($stream);
                 $image = stream_get_contents($stream);
-                $imageComp = gzdeflate($image);
-                $imageData = 'data:image/jpeg;base64,' . base64_encode($imageComp);
+                $imageData = 'data:image/jpeg;base64,' . base64_encode($image);
                 $content .= '<img src="' . $imageData . '" alt="' . $postTitle . '" />';
                 $content .= '</a><br>';
                 array_push($enclosures, $singleMedia->display_url);

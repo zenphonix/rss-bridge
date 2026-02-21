@@ -80,7 +80,7 @@
                         <?php foreach ($item['enclosures'] as $enclosure): ?>
                             <li class="enclosure">
                                 <a href="<?= e($enclosure) ?>" rel="noopener noreferrer nofollow">
-									<?=	e(parse_url($enclosure, PHP_URL_PATH)) ?>
+									<?=	e(substr(parse_url($enclosure, PHP_URL_PATH), strrpos(parse_url($enclosure, PHP_URL_PATH), '/') + 1)) ?>
                                 </a>
                             </li>
                         <?php endforeach; ?>

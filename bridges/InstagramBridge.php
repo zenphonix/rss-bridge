@@ -201,7 +201,6 @@ class InstagramBridge extends BridgeAbstract
                     $item['enclosures'] = $data[1];
                     break;
                 case 'GraphImage':
-                    $item['content'] = '<a href="' . htmlentities($item['uri']) . '" target="_blank">';
                     $imageOriginal = imagecreatefromstring(file_get_contents($mediaURI));
                     $imageSmall = imagescale($imageOriginal,540);
                     $stream = fopen('php://temp','r+');
@@ -209,6 +208,7 @@ class InstagramBridge extends BridgeAbstract
                     rewind($stream);
                     $image = stream_get_contents($stream);
                     $imageData = 'data:image/png;base64,' . base64_encode($image);
+                    $item['content'] = '<a href="' . htmlentities($item['uri']) . '" target="_blank">';
                     $item['content'] .= '<img src="' . $imageData . '" alt="' . $item['title'] . '" />';
                     $item['content'] .= '</a><br><br>' . nl2br(preg_replace($pattern, $replace, htmlentities($textContent)));
                     $item['enclosures'] = [$mediaURI];
@@ -249,7 +249,6 @@ class InstagramBridge extends BridgeAbstract
                 if (in_array($singleMedia->display_url, $enclosures)) {
                     continue; // check if not added yet
                 }
-                $content .= '<a href="' . $singleMedia->display_url . '" target="_blank">';
                 $imageOriginal = imagecreatefromstring(file_get_contents($singleMedia->display_url));
                 $imageSmall = imagescale($imageOriginal,540);
                 $stream = fopen('php://temp','r+');
@@ -257,6 +256,7 @@ class InstagramBridge extends BridgeAbstract
                 rewind($stream);
                 $image = stream_get_contents($stream);
                 $imageData = 'data:image/png;base64,' . base64_encode($image);
+                $content .= '<a href="' . $singleMedia->display_url . '" target="_blank">';
                 $content .= '<img src="' . $imageData . '" alt="' . $postTitle . '" />';
                 $content .= '</a><br>';
                 array_push($enclosures, $singleMedia->display_url);

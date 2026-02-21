@@ -202,7 +202,7 @@ class InstagramBridge extends BridgeAbstract
                     break;
                 case 'GraphImage':
                     $item['content'] = '<a href="' . htmlentities($item['uri']) . '" target="_blank">';
-                    $image = file_get_contents($mediaURI);
+                    $image = imagecreatefromstring(file_get_contents($mediaURI));
                     $imageSmall = imagescale($image,540);
                     $imageData = 'data:image/jpeg;base64,' . base64_encode($imageSmall);
                     $item['content'] .= '<img src="' . $imageData . '" alt="' . $item['title'] . '" />';
@@ -246,7 +246,7 @@ class InstagramBridge extends BridgeAbstract
                     continue; // check if not added yet
                 }
                 $content .= '<a href="' . $singleMedia->display_url . '" target="_blank">';
-                $image = file_get_contents($singleMedia->display_url);
+                $image = imagecreatefromstring(file_get_contents($singleMedia->display_url));
                 $imageSmall = imagescale($image,540);
                 $imageData = 'data:image/jpeg;base64,' . base64_encode($imageSmall);
                 $content .= '<img src="' . $imageData . '" alt="' . $postTitle . '" />';

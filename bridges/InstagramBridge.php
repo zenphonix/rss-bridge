@@ -202,7 +202,9 @@ class InstagramBridge extends BridgeAbstract
                     break;
                 case 'GraphImage':
                     $item['content'] = '<a href="' . htmlentities($item['uri']) . '" target="_blank">';
-                    $item['content'] .= '<img src="' . htmlentities($mediaURI) . '" alt="' . $item['title'] . '" />';
+                    $image = file_get_contents($mediaURI);
+                    $imageData = 'data:image/jpeg;base64,' . base64_encode($image);
+                    $item['content'] .= '<img src="' . $imageData . '" alt="' . $item['title'] . '" />';
                     $item['content'] .= '</a><br><br>' . nl2br(preg_replace($pattern, $replace, htmlentities($textContent)));
                     $item['enclosures'] = [$mediaURI];
                     break;
@@ -243,7 +245,9 @@ class InstagramBridge extends BridgeAbstract
                     continue; // check if not added yet
                 }
                 $content .= '<a href="' . $singleMedia->display_url . '" target="_blank">';
-                $content .= '<img src="' . $singleMedia->display_url . '" alt="' . $postTitle . '" />';
+                $image = file_get_contents($singleMedia->display_url);
+                $imageData = 'data:image/jpeg;base64,' . base64_encode($image);
+                $content .= '<img src="' . $imageData . '" alt="' . $postTitle . '" />';
                 $content .= '</a><br>';
                 array_push($enclosures, $singleMedia->display_url);
             }

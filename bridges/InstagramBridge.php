@@ -246,8 +246,8 @@ class InstagramBridge extends BridgeAbstract
                 }
                 $content .= '<a href="' . $singleMedia->display_url . '" target="_blank">';
                 $image = file_get_contents($singleMedia->display_url);
-                $imageData = base64_encode($image);
-                $content .= '<img src="data:image/jpeg;base64,' . $imageData . '" alt="' . $postTitle . '" />';
+                $imageData = 'data:image/jpeg;base64,' . base64_encode($image);
+                $content .= '<img src="' . $imageData . '" alt="' . $postTitle . '" />';
                 $content .= '</a><br>';
                 array_push($enclosures, $singleMedia->display_url);
             }

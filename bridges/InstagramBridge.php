@@ -202,9 +202,9 @@ class InstagramBridge extends BridgeAbstract
                     break;
                 case 'GraphImage':
                     $imageOriginal = imagecreatefromstring(file_get_contents($mediaURI));
-                    $imageSmall = imagescale($imageOriginal,540);
-                    $stream = fopen('php://temp','r+');
-                    imagepng($imageSmall,$stream);
+                    $imageSmall = imagescale($imageOriginal, 540);
+                    $stream = fopen('php://temp', 'r+');
+                    imagepng($imageSmall, $stream);
                     rewind($stream);
                     $image = stream_get_contents($stream);
                     $imageData = 'data:image/png;base64,' . base64_encode($image);
@@ -250,9 +250,9 @@ class InstagramBridge extends BridgeAbstract
                     continue; // check if not added yet
                 }
                 $imageOriginal = imagecreatefromstring(file_get_contents($singleMedia->display_url));
-                $imageSmall = imagescale($imageOriginal,540);
-                $stream = fopen('php://temp','r+');
-                imagepng($imageSmall,$stream);
+                $imageSmall = imagescale($imageOriginal, 540);
+                $stream = fopen('php://temp', 'r+');
+                imagepng($imageSmall, $stream);
                 rewind($stream);
                 $image = stream_get_contents($stream);
                 $imageData = 'data:image/png;base64,' . base64_encode($image);

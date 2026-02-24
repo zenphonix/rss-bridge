@@ -202,16 +202,24 @@ class InstagramBridge extends BridgeAbstract
                     break;
                 case 'GraphImage':
                     $imageOriginal = imagecreatefromstring(file_get_contents($mediaURI));
-                    $imageSmall = imagescale($imageOriginal, 360);
-                    $stream = fopen('php://temp', 'r+');
-                    imagepng($imageSmall, $stream);
-                    rewind($stream);
-                    $image = stream_get_contents($stream);
-                    $imageData = 'data:image/png;base64,' . base64_encode($image);
+                    if ($imageOriginal) {
+                        $imageSmall = imagescale($imageOriginal, 360);
+                        $stream = fopen('php://temp', 'r+');
+                        imagepng($imageSmall, $stream);
+                        rewind($stream);
+                        $image = stream_get_contents($stream);
+                        $imageData = 'data:image/png;base64,' . base64_encode($image);
+                        unset($imageOriginal);
+                        unset($imageSmall);
+                        unset($image);
+                    } else {
+                        $imageData = htmlentities($mediaURI);
+                    }
                     $item['content'] = '<a href="' . htmlentities($mediaURI) . '" target="_blank">';
                     $item['content'] .= '<img src="' . $imageData . '" alt="' . $item['title'] . '" />';
                     $item['content'] .= '</a><br><br>' . nl2br(preg_replace($pattern, $replace, htmlentities($textContent)));
                     $item['enclosures'] = [$mediaURI];
+                    unset($imageData);
                     break;
                 case 'GraphVideo':
                     $data = $this->getInstagramVideoData($item['uri'], $mediaURI, $media, $textContent);
@@ -250,16 +258,24 @@ class InstagramBridge extends BridgeAbstract
                     continue; // check if not added yet
                 }
                 $imageOriginal = imagecreatefromstring(file_get_contents($singleMedia->display_url));
-                $imageSmall = imagescale($imageOriginal, 360);
-                $stream = fopen('php://temp', 'r+');
-                imagepng($imageSmall, $stream);
-                rewind($stream);
-                $image = stream_get_contents($stream);
-                $imageData = 'data:image/png;base64,' . base64_encode($image);
-                $content .= '<a href="' . $singleMedia->display_url . '" target="_blank">';
+                if ($imageOriginal) {
+                    $imageSmall = imagescale($imageOriginal, 360);
+                    $stream = fopen('php://temp', 'r+');
+                    imagepng($imageSmall, $stream);
+                    rewind($stream);
+                    $image = stream_get_contents($stream);
+                    $imageData = 'data:image/png;base64,' . base64_encode($image);
+                    unset($imageOriginal);
+                    unset($imageSmall);
+                    unset($image);
+                } else {
+                    $imageData = htmlentities($singleMedia->display_url);
+                }
+                $content .= '<a href="' . htmlentities($singleMedia->display_url) . '" target="_blank">';
                 $content .= '<img src="' . $imageData . '" alt="' . $postTitle . '" />';
                 $content .= '</a><br>';
                 array_push($enclosures, $singleMedia->display_url);
+                unset($imageData);
             }
         }
         $content .= '<br>' . nl2br(htmlentities($textContent));

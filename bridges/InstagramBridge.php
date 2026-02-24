@@ -54,9 +54,14 @@ class InstagramBridge extends BridgeAbstract
                 ],
                 'defaultValue' => 'all'
             ],
+            'image_resolution' => [
+                'name' => 'Scale images to ',
+                'exampleValue' => '360',
+                'required' => true
+            ],
             'direct_links' => [
                 'name' => 'Use direct media links',
-                'type' => 'checkbox',
+                'type' => 'checkbox'
             ]
         ]
 
@@ -121,6 +126,7 @@ class InstagramBridge extends BridgeAbstract
 
     public function collectData()
     {
+        $imageResolution = !is_null($this->getInput('image_resolution')) && $this->getInput('image_resolution');
         $directLink = !is_null($this->getInput('direct_links')) && $this->getInput('direct_links');
 
         $data = $this->getInstagramJSON($this->getURI());
@@ -203,7 +209,7 @@ class InstagramBridge extends BridgeAbstract
                 case 'GraphImage':
                     $imageOriginal = imagecreatefromstring(file_get_contents($mediaURI));
                     if ($imageOriginal) {
-                        $imageSmall = imagescale($imageOriginal, 360);
+                        $imageSmall = imagescale($imageOriginal, $imageResolution);
                         $stream = fopen('php://temp', 'r+');
                         imagepng($imageSmall, $stream);
                         rewind($stream);
@@ -259,7 +265,7 @@ class InstagramBridge extends BridgeAbstract
                 }
                 $imageOriginal = imagecreatefromstring(file_get_contents($singleMedia->display_url));
                 if ($imageOriginal) {
-                    $imageSmall = imagescale($imageOriginal, 360);
+                    $imageSmall = imagescale($imageOriginal, $imageResolution);
                     $stream = fopen('php://temp', 'r+');
                     imagepng($imageSmall, $stream);
                     rewind($stream);

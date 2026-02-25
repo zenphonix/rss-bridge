@@ -206,10 +206,9 @@ class InstagramBridge extends BridgeAbstract
                     $item['enclosures'] = $data[1];
                     break;
                 case 'GraphImage':
-                    $imageResolution = !is_null($this->getInput('image_resolution')) && $this->getInput('image_resolution');
                     $imageOriginal = imagecreatefromstring(file_get_contents($mediaURI));
                     if ($imageOriginal) {
-                        $imageSmall = imagescale($imageOriginal, $imageResolution);
+                        $imageSmall = imagescale($imageOriginal, $this->getResolution());
                         $stream = fopen('php://temp', 'r+');
                         if ($imageSmall === false) {
                             die('imageResolution: ' . $imageResolution);
@@ -266,10 +265,9 @@ class InstagramBridge extends BridgeAbstract
                 if (in_array($singleMedia->display_url, $enclosures)) {
                     continue; // check if not added yet
                 }
-                $imageResolution = !is_null($this->getInput('image_resolution')) && $this->getInput('image_resolution');
                 $imageOriginal = imagecreatefromstring(file_get_contents($singleMedia->display_url));
                 if ($imageOriginal) {
-                    $imageSmall = imagescale($imageOriginal, $imageResolution);
+                    $imageSmall = imagescale($imageOriginal, $this->getResolution());
                     $stream = fopen('php://temp', 'r+');
                     if ($imageSmall === false) {
                         die('imageResolution: ' . $imageResolution);
@@ -408,6 +406,15 @@ class InstagramBridge extends BridgeAbstract
             return self::URI . 'explore/locations/' . urlencode($this->getInput('l'));
         }
         return parent::getURI();
+    }
+
+    public function getResolution()
+    {
+        if (!is_null($this->getInput('image_resolution'))) {
+            return $this->getInput('image_resolution');
+        }
+
+        return parent::getResolution();
     }
 
     public function detectParameters($url)

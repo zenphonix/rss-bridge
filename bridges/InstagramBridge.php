@@ -212,7 +212,7 @@ class InstagramBridge extends BridgeAbstract
                         $imageSmall = imagescale($imageOriginal, $imageResolution);
                         $stream = fopen('php://temp', 'r+');
                         if ($imageSmall === false) {
-                            die('imageOriginal: ' . $imageOriginal . ' | imageResolution: ' . $imageResolution);
+                            die('imageResolution: ' . $imageResolution);
                         }
                         imagepng($imageSmall, $stream);
                         rewind($stream);
@@ -271,7 +271,7 @@ class InstagramBridge extends BridgeAbstract
                     $imageSmall = imagescale($imageOriginal, $imageResolution);
                     $stream = fopen('php://temp', 'r+');
                     if ($imageSmall === false) {
-                        die('imageOriginal: ' . $imageOriginal . ' | imageResolution: ' . $imageResolution);
+                        die('imageResolution: ' . $imageResolution);
                     }
                     imagepng($imageSmall, $stream);
                     rewind($stream);
